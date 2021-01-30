@@ -9,8 +9,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import com.mx.base.papi.helper.ExchangeRateResponseHelper;
+import com.mx.base.papi.exceptions.CurrencyNotFoundException;
+import com.mx.base.papi.exceptions.InternalErrorException;
 import com.mx.base.papi.model.ExchangeRatesResponse;
+import com.mx.base.papi.rates.helper.ExchangeRateResponseHelper;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -35,7 +37,7 @@ public class StrongerServiceImpl implements StrongerService {
 						BigDecimal yesterdayRate = t2.getRates().get(counterCurrency);
 						
 						if (todayRate == null || yesterdayRate == null) {
-							throw new Exception();
+							throw new CurrencyNotFoundException();
 						}
 						
 						return todayRate.compareTo(yesterdayRate) > 0;
@@ -64,7 +66,7 @@ public class StrongerServiceImpl implements StrongerService {
 		    		emitter.onComplete();
 		    		
 				} catch (Exception e) {
-					emitter.onError(e);
+					emitter.onError(new InternalErrorException());
 				}
 			}
 		});

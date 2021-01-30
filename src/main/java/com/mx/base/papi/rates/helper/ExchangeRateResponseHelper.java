@@ -1,4 +1,4 @@
-package com.mx.base.papi.helper;
+package com.mx.base.papi.rates.helper;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -6,6 +6,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import com.google.gson.Gson;
+import com.mx.base.papi.exceptions.CurrencyNotFoundException;
+import com.mx.base.papi.exceptions.InternalErrorException;
 import com.mx.base.papi.model.ExchangeRatesResponse;
 
 import io.reactivex.Single;
@@ -35,6 +37,7 @@ public class ExchangeRateResponseHelper {
 		    		
 				} catch (Exception e) {
 					
+					subscriber.onError(new InternalErrorException());
 				}
 			}
 		});		
@@ -56,7 +59,7 @@ public class ExchangeRateResponseHelper {
     		return gson.fromJson(responseString, ExchangeRatesResponse.class);
 
 		} catch (Exception e) {
-			throw new Exception();
+			throw new CurrencyNotFoundException();
 		} finally {
     		in.close();
 		} 
