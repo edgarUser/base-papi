@@ -1,4 +1,4 @@
-package com.mx.base.papi;
+package com.mx.base.papi.rates;
 
 
 import java.util.concurrent.CountDownLatch;
@@ -16,8 +16,8 @@ import org.glassfish.jersey.server.ManagedAsync;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mx.base.papi.model.ExchangeRatesResponse;
-import com.mx.base.papi.responses.RateResponse;
-import com.mx.base.papi.services.ExchangeRatesService;
+import com.mx.base.papi.rates.responses.RateResponse;
+import com.mx.base.papi.rates.services.ExchangeRatesService;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;

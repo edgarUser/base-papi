@@ -1,4 +1,4 @@
-package com.mx.base.papi.services;
+package com.mx.base.papi.rates.services;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

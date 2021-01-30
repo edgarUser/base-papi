@@ -1,4 +1,4 @@
-package com.mx.base.papi.responses;
+package com.mx.base.papi.rates.responses;
 
 import java.math.BigDecimal;
 

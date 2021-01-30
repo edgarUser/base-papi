@@ -1,4 +1,4 @@
-package com.mx.base.papi.services;
+package com.mx.base.papi.rates.services;
 
 import com.mx.base.papi.model.ExchangeRatesResponse;
 
