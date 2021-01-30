@@ -11,5 +11,6 @@ public class JerseyConfig extends ResourceConfig {
         
         register(HelloService.class);
         register(ReverseService.class);
+        register(RatesEndPoint.class);
     }
 }
