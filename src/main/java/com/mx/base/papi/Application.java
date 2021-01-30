@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.mx.base.papi.exceptions.CurrencyNotFoundMapper;
 import com.mx.base.papi.exceptions.InternalErrorMapper;
+import com.mx.base.papi.rates.adapter.ExchangeRatesAdapter;
 import com.mx.base.papi.rates.services.ExchangeRatesService;
 import com.mx.base.papi.rates.services.ExchangeRatesServiceImpl;
 import com.mx.base.papi.stronger.services.StrongerService;
@@ -21,13 +22,18 @@ public class Application {
 	}
 
 	@Bean
+	public ExchangeRatesAdapter getExchangeRatesAdapter() {
+		return new ExchangeRatesAdapter();
+	}
+
+	@Bean
 	public ExchangeRatesService getExchangeRatesService() {
-		return new ExchangeRatesServiceImpl();
+		return new ExchangeRatesServiceImpl(getExchangeRatesAdapter());
 	}
 
 	@Bean
 	public StrongerService getStrongerService() {
-		return new StrongerServiceImpl();
+		return new StrongerServiceImpl(getExchangeRatesAdapter());
 	}
 
 	@Bean

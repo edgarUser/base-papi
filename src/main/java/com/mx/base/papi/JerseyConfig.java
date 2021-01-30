@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 
 import com.mx.base.papi.exceptions.CurrencyNotFoundMapper;
 import com.mx.base.papi.exceptions.InternalErrorMapper;
+import com.mx.base.papi.hello.HelloService;
+import com.mx.base.papi.hello.ReverseService;
 import com.mx.base.papi.rates.RatesEndPoint;
 import com.mx.base.papi.stronger.StrongerEndPoint;
 

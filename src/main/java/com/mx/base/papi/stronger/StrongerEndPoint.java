@@ -26,19 +26,19 @@ public class StrongerEndPoint {
 	@Autowired
 	private StrongerService strongerService;
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @ManagedAsync
-    public void getRates(@Suspended final AsyncResponse async, 
-    		@PathParam("baseCurrency") final String baseCurrency,
-    		@PathParam("counterCurrency") final String counterCurrency) {
-    	
-    	final StrongerResponse response = new StrongerResponse();
-    	final CountDownLatch outerLatch = new CountDownLatch(1);
-    	
-    	strongerService.isStronger(baseCurrency, counterCurrency).subscribe(new SingleObserver<Boolean>() {
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@ManagedAsync
+	public void getRates(@Suspended final AsyncResponse async, @PathParam("baseCurrency") final String baseCurrency,
+			@PathParam("counterCurrency") final String counterCurrency) {
 
-			public void onSubscribe(Disposable d) {}
+		final StrongerResponse response = new StrongerResponse();
+		final CountDownLatch outerLatch = new CountDownLatch(1);
+
+		strongerService.isStronger(baseCurrency, counterCurrency).subscribe(new SingleObserver<Boolean>() {
+
+			public void onSubscribe(Disposable d) {
+			}
 
 			public void onSuccess(Boolean result) {
 				response.setStronger(result);
@@ -50,16 +50,15 @@ public class StrongerEndPoint {
 			}
 		});
 
+		try {
+			if (!outerLatch.await(10, TimeUnit.SECONDS)) {
+				throw new Exception();
+			}
+		} catch (Exception e) {
 
-    	try {
-    		if (!outerLatch.await(10, TimeUnit.SECONDS)) {
-    			throw new Exception();
-    		}
-    	} catch (Exception e) {
-    		
-    	}
-    	
+		}
+
 		async.resume(response);
-    }
+	}
 
 }

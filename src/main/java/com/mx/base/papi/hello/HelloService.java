@@ -1,4 +1,4 @@
-package com.mx.base.papi;
+package com.mx.base.papi.hello;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

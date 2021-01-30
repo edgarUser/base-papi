@@ -9,10 +9,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.mx.base.papi.exceptions.CurrencyNotFoundException;
 import com.mx.base.papi.exceptions.InternalErrorException;
 import com.mx.base.papi.model.ExchangeRatesResponse;
-import com.mx.base.papi.rates.helper.ExchangeRateResponseHelper;
+import com.mx.base.papi.rates.adapter.ExchangeRatesAdapter;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -25,10 +27,18 @@ public class StrongerServiceImpl implements StrongerService {
 	private static final String HISTORY_RATE_BASE_END_POINT = "http://api.fixer.io/%slatest?base=%s";
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
 
+	private ExchangeRatesAdapter ratesAdapter;
+	
+	@Autowired
+	public StrongerServiceImpl(ExchangeRatesAdapter exchangeRatesAdapter) {
+		
+		this.ratesAdapter = exchangeRatesAdapter;
+	}
+
 	public Single<Boolean> isStronger(final String baseCurrency, final String counterCurrency) {
 
 		return Observable.zip(
-				ExchangeRateResponseHelper.getExchangeRates(baseCurrency).toObservable(), 
+				ratesAdapter.getExchangeRates(baseCurrency).toObservable(), 
 				yesterdayRate(baseCurrency), 
 				new BiFunction<ExchangeRatesResponse, ExchangeRatesResponse, Boolean>() {
 					public Boolean apply(ExchangeRatesResponse t1, ExchangeRatesResponse t2) throws Exception {
@@ -60,7 +70,7 @@ public class StrongerServiceImpl implements StrongerService {
 		    		con.setRequestMethod("GET");
 
 		    		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		    		ExchangeRatesResponse response = ExchangeRateResponseHelper.readRatesFromResponse(in);
+		    		ExchangeRatesResponse response = ratesAdapter.readRatesFromResponse(in);
 
 		    		emitter.onNext(response);
 		    		emitter.onComplete();
@@ -80,3 +90,4 @@ public class StrongerServiceImpl implements StrongerService {
 		return dateFormat.format(calendar.getTime());
 	}
 }
+
